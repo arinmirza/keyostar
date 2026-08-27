@@ -1,0 +1,50 @@
+package com.example.kvstore.store;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/store")
+@Validated
+public class KeyValueController {
+    public static final int MAX_KEY_LENGTH = 10;
+    public static final int MAX_VALUE_LENGTH = 1024;
+
+    private final KeyValueStore store;
+
+    public KeyValueController(KeyValueStore store) {
+        this.store = store;
+    }
+
+    @PutMapping("/{key}")
+    public ResponseEntity<Void> put(
+            @PathVariable @NotBlank @Size(max=MAX_KEY_LENGTH, message="{kvstore.key.too-long}") String key,
+            @RequestBody @NotNull @Size(max=MAX_VALUE_LENGTH, message="{kvstore.value.too-long}") String value) {
+        store.put(key, value);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{key}")
+    public ResponseEntity<String> get(
+            @PathVariable @NotBlank @Size(max=MAX_KEY_LENGTH, message="{kvstore.key.too-long}") String key) {
+        final Optional<String> value = store.get(key);
+        return value.isPresent()
+                ? ResponseEntity.of(value)
+                : ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{key}")
+    public ResponseEntity<Void> delete(
+            @PathVariable @NotBlank @Size(max=MAX_KEY_LENGTH, message="{kvstore.key.too-long}") String key) {
+        final Optional<String> removed = store.delete(key);
+        return removed.isPresent()
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
+    }
+}
