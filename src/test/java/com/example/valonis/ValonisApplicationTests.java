@@ -1,10 +1,10 @@
-package com.example.kvstore;
+package com.example.valonis;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class KvstoreApplicationTests {
+class ValonisApplicationTests {
 
     @Test
     void contextLoads() {

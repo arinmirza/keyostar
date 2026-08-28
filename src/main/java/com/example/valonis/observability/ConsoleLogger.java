@@ -1,6 +1,9 @@
-package com.example.kvstore.logging;
+package com.example.valonis.observability;
 
-public class PlainLogger implements ILogger {
+import org.springframework.stereotype.Component;
+
+@Component
+public class ConsoleLogger implements Logger {
 
     private final String loggerName;
 
@@ -12,11 +15,11 @@ public class PlainLogger implements ILogger {
         ERROR,
     }
 
-    public PlainLogger() {
-        this.loggerName = "PlainLogger";
+    public ConsoleLogger() {
+        this.loggerName = "ConsoleLogger";
     }
 
-    public PlainLogger(String loggerName) {
+    public ConsoleLogger(String loggerName) {
         this.loggerName = loggerName;
     }
 
