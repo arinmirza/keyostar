@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: valonis-store
+
+spec:
+  clusterIP: None
+
+  selector:
+    app: valonis
+    role: store
+
+  ports:
+    - port: 8080
+      targetPort: 8080

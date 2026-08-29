@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: valonis-gateway
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: valonis
+      role: gateway
+
+  template:
+    metadata:
+      labels:
+        app: valonis
+        role: gateway
+
+    spec:
+      containers:
+        - name: valonis
+          image: valonis:local
+
+          ports:
+            - containerPort: 8080
+
+          env:
+            - name: VALONIS_INSTANCE_MODE
+              value: GATEWAY
+
+            - name: VALONIS_GATEWAY_ADDRESSING
+              value: kubernetes
+
+            - name: VALONIS_GATEWAY_HASH_FUNCTION
+              value: java
+
+            - name: VALONIS_GATEWAY_STORE_COUNT
+              value: "3"
+
+            - name: VALONIS_KUBERNETES_STORE_STATEFUL_SET_NAME
+              value: valonis-store
+
+            - name: VALONIS_KUBERNETES_STORE_SERVICE_NAME
+              value: valonis-store
+
+            - name: VALONIS_KUBERNETES_STORE_PORT
+              value: "8080"
+
+            - name: SERVER_PORT
+              value: "8080"

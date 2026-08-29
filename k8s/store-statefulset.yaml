@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: valonis-store
+
+spec:
+  serviceName: valonis-store
+
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: valonis
+      role: store
+
+  template:
+    metadata:
+      labels:
+        app: valonis
+        role: store
+
+    spec:
+      containers:
+        - name: valonis
+          image: valonis:local
+
+          ports:
+            - containerPort: 8080
+
+          env:
+            - name: VALONIS_INSTANCE_MODE
+              value: STORE
+
+            - name: SERVER_PORT
+              value: "8080"

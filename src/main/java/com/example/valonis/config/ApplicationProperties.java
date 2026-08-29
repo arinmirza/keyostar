@@ -6,25 +6,47 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public record ApplicationProperties(
     InstanceProperties instance,
     GatewayProperties gateway,
-    StoreProperties store) {
+    LocalhostProperties localhost,
+    DockerProperties docker,
+    KubernetesProperties kubernetes,
+    ObservabilityProperties observability) {
 
     public record InstanceProperties(InstanceMode mode) {}
 
     public record GatewayProperties(
-        String baseUrl,
-        int basePort,
-        int count,
+        String addressing,
         String hashFunction,
-        String addressResolver
+        int storeCount
     ) {}
 
-    public record StoreProperties(
-        String baseUrl,
-        int basePort,
-        int count
+    public record LocalhostProperties(
+            int storeBasePort
     ) {}
 
-    public enum InstanceMode { GATEWAY, SHARD }
+    public record DockerProperties(
+            String storeHostTemplate,
+            int storePort) {}
+
+    public record KubernetesProperties(
+            String storeStatefulSetName,
+            String storeServiceName,
+            int storePort
+    ) {}
+
+    public record ObservabilityProperties(
+        String logger,
+        String logLevel
+    ) {}
+
+    public enum InstanceMode { GATEWAY, STORE }
+
+    public enum LogLevel {
+        TRACE,
+        DEBUG,
+        INFO,
+        WARN,
+        ERROR,
+    }
 
 }
 

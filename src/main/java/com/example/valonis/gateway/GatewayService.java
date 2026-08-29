@@ -1,25 +1,35 @@
 package com.example.valonis.gateway;
 
+import com.example.valonis.config.ApplicationProperties;
 import com.example.valonis.gateway.address.AddressResolver;
 import com.example.valonis.gateway.partition.DefaultPartitioner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriBuilder;
 
 import java.net.URI;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 @Service
 @ConditionalOnProperty(name = "valonis.instance.mode", havingValue = "GATEWAY")
 public class GatewayService {
 
+    private final ApplicationProperties properties;
     private final DefaultPartitioner partitioner;
     private final AddressResolver addressResolver;
     private final RestClient restClient;
 
-    public GatewayService(DefaultPartitioner partitioner, AddressResolver addressResolver) {
+    public GatewayService(ApplicationProperties properties,
+                          DefaultPartitioner partitioner,
+                          AddressResolver addressResolver) {
+        this.properties = properties;
         this.partitioner = partitioner;
         this.addressResolver = addressResolver;
         this.restClient = RestClient.builder().build();
@@ -51,6 +61,26 @@ public class GatewayService {
                 .uri(builder)
                 .retrieve()
                 .toBodilessEntity();
+    }
+
+    public ResponseEntity<List<Map<String, String>>> stats() {
+        int storeCount = properties.gateway().storeCount();
+
+        List<CompletableFuture<Map<String, String>>> futures =
+                IntStream.range(0, storeCount)
+                        .mapToObj(i -> CompletableFuture.supplyAsync(
+                                () -> restClient
+                                        .get()
+                                        .uri(addressResolver.resolve(i) + "/stats/")
+                                        .retrieve()
+                                        .body(new ParameterizedTypeReference<Map<String, String>>() {})
+                        ).exceptionally(exception -> Map.of())
+                        ).toList();
+
+        CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new)).join();
+
+        List<Map<String, String>> results = futures.stream().map(CompletableFuture::join).toList();
+        return ResponseEntity.ok(results);
     }
 
     private URI resolveStore(String key) {

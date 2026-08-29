@@ -1,30 +1,25 @@
 package com.example.valonis.observability;
 
+import com.example.valonis.config.ApplicationProperties;
+import com.example.valonis.config.ApplicationProperties.LogLevel;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("console")
 public class ConsoleLogger implements Logger {
 
     private final String loggerName;
+    private final LogLevel threshold;
 
-    public enum LogLevel {
-        TRACE,
-        DEBUG,
-        INFO,
-        WARN,
-        ERROR,
-    }
-
-    public ConsoleLogger() {
+    public ConsoleLogger(ApplicationProperties properties) {
         this.loggerName = "ConsoleLogger";
+        this.threshold = LogLevel.valueOf(properties.observability().logLevel().toUpperCase());
     }
 
-    public ConsoleLogger(String loggerName) {
-        this.loggerName = loggerName;
-    }
-
-    private void log(LogLevel level, String message) {
-        System.out.printf("%s [%s] [%s] %s%n", java.time.Instant.now(), loggerName, level, message);
+    private void log(ApplicationProperties.LogLevel level, String message) {
+        if (threshold.compareTo(level) <= 0) {
+            System.out.printf("%s [%s] [%s] %s%n", java.time.Instant.now(), loggerName, level, message);
+        }
     }
 
     public void trace(String message) {

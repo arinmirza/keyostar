@@ -36,6 +36,6 @@ public class GatewayControllerExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleUnexpectedException(Exception exception) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("unhandled-error");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("unhandled-error: " + exception.getMessage());
     }
 }

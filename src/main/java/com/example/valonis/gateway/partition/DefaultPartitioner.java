@@ -7,17 +7,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DefaultPartitioner implements Partitioner {
-    private final HashFunctionRegistry registry;
     private final ApplicationProperties properties;
+    private final HashFunction hasher;
 
-    public DefaultPartitioner(HashFunctionRegistry registry, ApplicationProperties properties) {
-        this.registry = registry;
+    public DefaultPartitioner(ApplicationProperties properties, HashFunctionRegistry registry) {
+        this.hasher = registry.get(properties.gateway().hashFunction());
         this.properties = properties;
     }
 
     public int getStoreIndex(String key) {
-        HashFunction hasher = registry.get(properties.gateway().hashFunction());
-        int shardCount = this.properties.store().count();
-        return Math.floorMod(hasher.hash(key), shardCount);
+        int storeCount = this.properties.gateway().storeCount();
+        return Math.floorMod(hasher.hash(key), storeCount);
     }
 }

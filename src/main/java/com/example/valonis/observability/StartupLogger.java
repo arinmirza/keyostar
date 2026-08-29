@@ -10,13 +10,17 @@ import org.springframework.stereotype.Component;
 public class StartupLogger implements ApplicationRunner {
 
     private final ApplicationProperties properties;
+    private final Logger logger;
 
-    public StartupLogger(ApplicationProperties properties) {
+    public StartupLogger(ApplicationProperties properties, Logger logger) {
         this.properties = properties;
+        this.logger = logger;
     }
 
     @Override
-    public void run (@NonNull ApplicationArguments args) {
-        System.out.printf("Valonis instance started in %s mode.%n", properties.instance().mode());
+    public void run(@NonNull ApplicationArguments args) {
+        logger.info("Valonis instance started in [%s] mode.".formatted(properties.instance().mode()));
+        logger.info("For sanity check, this executable is compiled from the source code with magic string [1].");
+        logger.info("The applications properties are configured as follows: %s".formatted(properties.toString()));
     }
 }
