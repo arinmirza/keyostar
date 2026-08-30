@@ -5,6 +5,6 @@ RUN ./mvnw clean package -DskipTests
 
 FROM eclipse-temurin:21-jre
 WORKDIR /app
-COPY --from=build /app/target/valonis-*.jar valonis.jar
+COPY --from=build /app/target/keyostar-*.jar keyostar.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/app/valonis.jar"]
+ENTRYPOINT ["java", "-jar", "/app/keyostar.jar"]

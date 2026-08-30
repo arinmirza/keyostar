@@ -1,34 +1,34 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: valonis-store
+  name: keyostar-store
 
 spec:
-  serviceName: valonis-store
+  serviceName: keyostar-store
 
   replicas: 3
 
   selector:
     matchLabels:
-      app: valonis
+      app: keyostar
       role: store
 
   template:
     metadata:
       labels:
-        app: valonis
+        app: keyostar
         role: store
 
     spec:
       containers:
-        - name: valonis
-          image: valonis:local
+        - name: keyostar
+          image: keyostar:local
 
           ports:
             - containerPort: 8080
 
           env:
-            - name: VALONIS_INSTANCE_MODE
+            - name: KEYOSTAR_INSTANCE_MODE
               value: STORE
 
             - name: SERVER_PORT

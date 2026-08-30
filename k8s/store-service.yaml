@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: valonis-store
+  name: keyostar-store
 
 spec:
   clusterIP: None
 
   selector:
-    app: valonis
+    app: keyostar
     role: store
 
   ports:

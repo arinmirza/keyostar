@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>valonis</artifactId>
+    <artifactId>keyostar</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>valonis</name>
-    <description>Simple Key-Value Store for Celonis</description>
+    <name>keyostar</name>
+    <description>Simple key-value store.</description>
     <url/>
     <licenses>
         <license/>
