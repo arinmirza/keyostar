@@ -20,7 +20,7 @@ public class StartupLogger implements ApplicationRunner {
     @Override
     public void run(@NonNull ApplicationArguments args) {
         logger.info("Keyostar instance started in [%s] mode.".formatted(properties.instance().mode()));
-        logger.info("For sanity check, this executable is compiled from the source code with magic string [3].");
+        logger.info("For sanity check, this executable is compiled from the source code with magic string [5].");
         logger.info("The applications properties are configured as follows: %s".formatted(properties.toString()));
     }
 }

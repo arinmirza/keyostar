@@ -1,0 +1,20 @@
+{
+  "$schema": "https://zardui.com/schema.json",
+  "style": "css",
+  "icons": "lucide",
+  "rtl": false,
+  "projectType": "angular",
+  "appConfigFile": "src/app/app.config.ts",
+  "packageManager": "npm",
+  "tailwind": {
+    "css": "src/styles.css",
+    "baseColor": "neutral"
+  },
+  "baseUrl": "src/app",
+  "aliases": {
+    "components": "@/shared/zard-ui/components",
+    "utils": "@/shared/zard-ui/utils",
+    "core": "@/shared/zard-ui/core",
+    "services": "@/shared/zard-ui/services"
+  }
+}

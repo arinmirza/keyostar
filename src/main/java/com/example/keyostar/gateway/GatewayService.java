@@ -36,7 +36,8 @@ public class GatewayService {
     }
 
     public ResponseEntity<String> get(String key) {
-        var builder = getStoreUriBuilder(key);
+        URI store = resolveStore(key);
+        var builder = getUriBuilderForKey(store, key);
         return restClient
                 .get()
                 .uri(builder)
@@ -45,7 +46,8 @@ public class GatewayService {
     }
 
     public ResponseEntity<Void> put(String key, String value) {
-        var builder = getStoreUriBuilder(key);
+        URI store = resolveStore(key);
+        var builder = getUriBuilderForKey(store, key);
         return restClient
                 .put()
                 .uri(builder)
@@ -55,7 +57,8 @@ public class GatewayService {
     }
 
     public ResponseEntity<Void> delete(String key) {
-        var builder = getStoreUriBuilder(key);
+        URI store = resolveStore(key);
+        var builder = getUriBuilderForKey(store, key);
         return restClient
                 .delete()
                 .uri(builder)
@@ -71,7 +74,7 @@ public class GatewayService {
                         .mapToObj(i -> CompletableFuture.supplyAsync(
                                 () -> restClient
                                         .get()
-                                        .uri(addressResolver.resolve(i) + "/stats/")
+                                        .uri(getUriBuilderForStats(addressResolver.resolve(i)))
                                         .retrieve()
                                         .body(new ParameterizedTypeReference<Map<String, String>>() {})
                         ).exceptionally(exception -> Map.of())
@@ -88,13 +91,31 @@ public class GatewayService {
         return addressResolver.resolve(storeIndex);
     }
 
+    private Function<UriBuilder, URI> getUriBuilderForKey(URI store, String key) {
+        return (uriBuilder) ->  uriBuilder
+                .scheme(store.getScheme())
+                .host(store.getHost())
+                .port(store.getPort())
+                .path("store/key/{key}")
+                .build(key);
+    }
+
+    private Function<UriBuilder, URI> getUriBuilderForStats(URI store) {
+        return (uriBuilder) ->  uriBuilder
+                .scheme(store.getScheme())
+                .host(store.getHost())
+                .port(store.getPort())
+                .path("store/stats")
+                .build();
+    }
+
     private Function<UriBuilder, URI> getStoreUriBuilder(String key) {
         URI storeAddress = resolveStore(key);
         return (uriBuilder) ->  uriBuilder
                 .scheme(storeAddress.getScheme())
                 .host(storeAddress.getHost())
                 .port(storeAddress.getPort())
-                .path("store/{key}")
+                .path("store/key/{key}")
                 .build(key);
     }
 }

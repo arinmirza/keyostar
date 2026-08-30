@@ -1,0 +1,51 @@
+<z-card zSize="default" class="w-full h-full">
+  <z-card-header>
+    <z-card-title class="font-semibold" zTitle="Request" />
+
+    <z-card-description zDescription="Interact with the KV store." />
+  </z-card-header>
+
+  <z-card-content class="h-full">
+    <div class="grid grid-cols-2 gap-2">
+      <div z-field class="w-full">
+        <label z-field-label class="font-semibold" for="key-field">Key:</label>
+        <input z-input id="key-field" [(value)]="currentKey"/>
+      </div>
+
+      <div z-field class="w-full">
+        <label z-field-label class="font-semibold" for="value-field">Value:</label>
+        <input z-input id="value-field" [(value)]="currentValue"/>
+      </div>
+    </div>
+  </z-card-content>
+
+  <z-card-footer>
+    <div class="flex w-full">
+      <z-button 
+        zType="outline" 
+        zSize="sm" 
+        class="w-1/3" 
+        (click)="get(currentKey())"
+      >
+        GET
+      </z-button>
+      <z-button
+        zType="outline"
+        zSize="sm"
+        class="w-1/3"
+        (click)="put(currentKey(), currentValue())"
+      >
+        PUT
+      </z-button>
+      <z-button 
+        zType="outline" 
+        zSize="sm" 
+        class="w-1/3" 
+        (click)="remove(currentKey())"
+      >
+        DELETE
+      </z-button>
+    </div>
+  </z-card-footer>
+
+</z-card>

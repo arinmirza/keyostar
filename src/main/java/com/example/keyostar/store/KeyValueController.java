@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 import static com.example.keyostar.config.StoreConstraints.MAX_KEY_LENGTH;
@@ -25,7 +26,7 @@ public class KeyValueController {
         this.store = store;
     }
 
-    @PutMapping("/{key}")
+    @PutMapping("/key/{key}")
     public ResponseEntity<Void> put(
             @PathVariable @NotBlank @Size(max=MAX_KEY_LENGTH, message="{store.key.too-long}") String key,
             @RequestBody @NotNull @Size(max=MAX_VALUE_LENGTH, message="{store.value.too-long}") String value) {
@@ -33,7 +34,7 @@ public class KeyValueController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{key}")
+    @GetMapping("/key/{key}")
     public ResponseEntity<String> get(
             @PathVariable @NotBlank @Size(max=MAX_KEY_LENGTH, message="{store.key.too-long}") String key) {
         final Optional<String> value = store.get(key);
@@ -42,7 +43,7 @@ public class KeyValueController {
                 : ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/{key}")
+    @DeleteMapping("/key/{key}")
     public ResponseEntity<Void> delete(
             @PathVariable @NotBlank @Size(max=MAX_KEY_LENGTH, message="{store.key.too-long}") String key) {
         final Optional<String> removed = store.delete(key);
@@ -50,4 +51,11 @@ public class KeyValueController {
                 ? ResponseEntity.noContent().build()
                 : ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/stats")
+    public ResponseEntity<Map<String, String>> stats() {
+        return ResponseEntity.of(Optional.ofNullable(store.stats()));
+    }
+
+
 }

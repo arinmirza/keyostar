@@ -1,0 +1,17 @@
+<div id="main-wrapper" class="w-full px-12 py-24">
+  <img src="/keyostar-logo-1.png" alt="Keyostar" class="h-24 mx-auto" />
+
+  <div id="main-content" class="flex h-[500px] gap-2">
+    <app-cluster-status class="flex-1 min-w-0" />
+
+    <div class="flex flex-col flex-2 min-w-0 gap-2">
+      <app-console
+        class="flex-1 min-h-0"
+        (responseReceived)="handleResponse($event)"
+      />
+      <app-response class="flex-1 min-h-0" [response]="lastResponse()" />
+    </div>
+
+    <app-history [history]="history()" class="flex-1 min-w-0" />
+  </div>
+</div>

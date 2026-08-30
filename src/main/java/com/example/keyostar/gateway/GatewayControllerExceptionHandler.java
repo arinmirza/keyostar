@@ -3,6 +3,7 @@ package com.example.keyostar.gateway;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -16,7 +17,7 @@ public class GatewayControllerExceptionHandler {
 
     @ExceptionHandler(ResourceAccessException.class)
     public ResponseEntity<String> handleResourceAccessException(ResourceAccessException exception) {
-        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("service-unavailable");
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).contentType(MediaType.TEXT_PLAIN).body("service-unavailable");
     }
 
     @ExceptionHandler(RestClientResponseException.class)
@@ -31,11 +32,11 @@ public class GatewayControllerExceptionHandler {
         List<String> messages = exception.getConstraintViolations().stream()
                 .map(ConstraintViolation::getMessage).toList();
         // Note: We only report the first violation message.
-        return ResponseEntity.badRequest().body(messages.getFirst());
+        return ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body(messages.getFirst());
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleUnexpectedException(Exception exception) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("unhandled-error: " + exception.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.TEXT_PLAIN).body("unhandled-error: " + exception.getMessage());
     }
 }

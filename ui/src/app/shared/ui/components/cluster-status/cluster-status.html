@@ -1,0 +1,47 @@
+<z-card class="h-full">
+  <z-card-header>
+    <z-card-title class="font-semibold" zTitle="Cluster" />
+    <z-card-description zDescription="Current cluster information." />
+  </z-card-header>
+
+  <z-card-content class="h-full">
+    @if (stores().length === 0) {
+      <div class="flex flex-col gap-2 items-center justify-center h-full">
+        <svg lucideGhost [size]="48" class="text-stone-300" [strokeWidth]="2" title="Empty"></svg>
+        <div class="text-muted-foreground">Nothing to show here.</div>
+      </div>
+    } @else {
+      <table z-table>
+        <thead z-table-header>
+          <tr z-table-row>
+            <th z-table-head>Store</th>
+            <th z-table-head>Status</th>
+            <th z-table-head>Entries</th>
+          </tr>
+        </thead>
+
+        <tbody z-table-body>
+          @for (store of stores(); track $index; let idx =$index) {
+            <tr z-table-row>
+              <td z-table-cell>Store {{ idx + 1 }}</td>
+
+              <td z-table-cell>
+                {{ store.size !== undefined ? 'Running' : 'Unreachable' }}
+              </td>
+
+              <td z-table-cell>
+                {{ store.size ?? "-" }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </z-card-content>
+
+  <z-card-footer>
+    <z-button zType="outline" zSize="sm" class="w-full"
+    (click)="stats()"
+    >Refresh Status</z-button>
+  </z-card-footer>
+</z-card>

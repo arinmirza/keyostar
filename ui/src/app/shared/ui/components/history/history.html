@@ -1,0 +1,53 @@
+<z-card zSize="default" class="w-full h-full">
+  <z-card-header>
+    <z-card-title class="font-semibold" zTitle="History" />
+
+    <z-card-description zDescription="Your latest requests." />
+  </z-card-header>
+
+  <z-card-content class="h-full overflow-y-scroll">
+    @if (history().length === 0) {
+      <div class="flex flex-col gap-2 items-center justify-center h-full">
+        <svg lucideGhost [size]="48" class="text-stone-300" [strokeWidth]="2" title="Empty"></svg>
+        <div class="text-muted-foreground">Nothing to show here.</div>
+      </div>
+    } @else {
+
+      <table z-table>
+        <thead z-table-header>
+          <tr z-table-row>
+            <th z-table-head>Method</th>
+            <th z-table-head>Key</th>
+            <th z-table-head>Status</th>
+            <th z-table-head>Duration</th>
+          </tr>
+        </thead>
+
+        <tbody z-table-body>
+          @for (entry of history(); track $index) {
+            <tr z-table-row>
+              <td z-table-cell>{{ entry.method }}</td>
+              <td z-table-cell> {{ entry.key.substring(0, 6) }}</td>
+              <td z-table-cell> {{ entry.status }}</td>
+              <td z-table-cell> 
+                {{ entry.durationMs.toFixed(1) }} ms
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+
+    }
+  </z-card-content>
+
+  @if (history().length > 0) {
+     <z-card-footer>
+    <p style="color: gray">
+      You made {{history().length}} requests in total.
+    </p>
+  </z-card-footer>
+  }
+
+ 
+</z-card>

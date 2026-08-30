@@ -1,0 +1,31 @@
+<z-card zSize="default" class="w-full h-full">
+  <z-card-header>
+    <z-card-title class="font-semibold" zTitle="Response" />
+  </z-card-header>
+
+  <z-card-content class="h-full overflow-y-scroll">
+    @if (response(); as response) {
+
+      <div class="flex flex-col gap-1 h-full">
+        <div class="flex flex-row border rounded-xl p-2">
+          <div class="w-32 font-semibold ">Status</div>
+          <div class="">{{response.status}}</div>
+        </div>
+        <div class="flex flex-row border rounded-xl p-2">
+          <div class="w-32 font-semibold">Duration</div>
+          <div class="">{{response.durationMs}} ms</div>
+        </div>
+        <div class="flex flex-row border rounded-xl p-2">
+          <div class="min-w-32 font-semibold">Body</div>
+          <div class="wrap-anywhere">{{response.body}}</div>
+        </div>
+      </div>
+
+    } @else {
+      <div class="flex flex-col gap-2 h-full justify-center items-center">
+        <svg lucideGhost [size]="48" class="text-stone-300" [strokeWidth]="2" title="Empty"></svg>
+        <div class="text-muted-foreground">Nothing to show here.</div>
+      </div>
+    }
+  </z-card-content>
+</z-card>
