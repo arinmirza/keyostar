@@ -106,7 +106,7 @@ Keyostar uses Spring Boot configuration properties and can be configured through
 
 
 ### Design Document
-TBD 
+See `Keyostar-Design_Document.pdf`.
 
 ## Tests
 No tests are implemented due to the scope of the task. This will be discussed conceptually during the interview.
