@@ -120,4 +120,4 @@ No benchmarks are implemented due to the scope of the task. This will be discuss
 The implementation was written entirely by me. During the development process, I used generative AI to learn more about the technology stack, discuss and evaluate design ideas, brainstorm possible approaches, and review my code.
 
 ### README.md
-This `README.md` was written by me and refined using generative AI for grammar, clarity, and conciseness. The API endpoint and environment variable tables were generated entirely with the assistance of AI. All AI-generated content was reviewed and verified by me for correctness.was reviewed and verified by me for correctness. 
+This `README.md` was written by me and refined using generative AI for grammar, clarity, and conciseness. The API endpoint and environment variable tables were generated entirely with the assistance of AI. All AI-generated content was reviewed and verified by me for correctness. 
