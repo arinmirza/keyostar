@@ -47,6 +47,9 @@ This will build and deploy 1 gateway and 3 store instances. The gateway will be 
 
 ## User Interface
 Keyostar provides a basic client interface implemented in Angular as a single page application (SPA).
+
+<img width="1266" height="622" alt="ui-screenshot" src="https://github.com/user-attachments/assets/94df1921-fdc5-418b-bb86-1875d4a1b1c1" />
+
 The implementation is not polished, and can be started in development mode as follows:
 Navigate to the `ui` directory under the root, and then execute the following command:
 ```shell
