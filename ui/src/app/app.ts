@@ -36,7 +36,7 @@ export interface KeyostarResponse {
   templateUrl: './app.html',
 })
 export class App {
-  protected readonly title = signal('ui');
+  protected readonly title = signal('Keyostar Interface');
   private readonly keyostar = inject(Keyostar);
 
   response = signal('');

@@ -73,7 +73,7 @@ export class AppConsoleComponent {
         this.responseReceived.emit({
           method: 'PUT',
           key,
-          body: '',
+          body: JSON.stringify(errorResponse.error),
           status: errorResponse?.status,
           durationMs,
         });
@@ -100,7 +100,7 @@ export class AppConsoleComponent {
         this.responseReceived.emit({
           method: 'DELETE',
           key,
-          body: '',
+          body: JSON.stringify(errorResponse.error),
           status: errorResponse?.status,
           durationMs: durationMs,
         });

@@ -5,10 +5,15 @@
   </z-card-header>
 
   <z-card-content class="h-full">
-    @if (stores().length === 0) {
+    @if (stores() === null) {
       <div class="flex flex-col gap-2 items-center justify-center h-full">
         <svg lucideGhost [size]="48" class="text-stone-300" [strokeWidth]="2" title="Empty"></svg>
         <div class="text-muted-foreground">Nothing to show here.</div>
+      </div>
+    }
+    @else if (stores()?.length === 0) {
+      <div class="flex flex-col gap-2 items-center justify-center h-full">
+        <div class="text-muted-foreground">Gateway is unreachable.</div>
       </div>
     } @else {
       <table z-table>

@@ -16,6 +16,8 @@ public record ApplicationProperties(
     public record GatewayProperties(
         String addressing,
         String hashFunction,
+        // TODO: This should be @Validated such that store count is never less than 1.
+        // In the current implementation DefaultPartitioner will throw.
         int storeCount
     ) {}
 

@@ -25,7 +25,7 @@ interface StoreStatus {
 export class ClusterStatusComponent {
   private readonly keyostar = inject(Keyostar);
 
-  readonly stores = signal<StoreStatus[]>([]);
+  readonly stores = signal<(StoreStatus[]) | null>(null);
 
   stats() {
     this.keyostar.stats().subscribe({
@@ -35,8 +35,8 @@ export class ClusterStatusComponent {
         }
       },
       error: (err) => {
-        console.error("Oh no, this should not have happened.")
-        console.error(err);
+        console.error("Cannot reach gateway. Reason:", err)
+        this.stores.set([]);
       } 
     });
   }

@@ -1,37 +1,40 @@
 services:
   gateway-0:
-    image: valonis:local
+    image: keyostar:local
     environment:
-      VALONIS_INSTANCE_MODE: GATEWAY
-      VALONIS_GATEWAY_ADDRESS_RESOLVER: docker
-      VALONIS_GATEWAY_HASH_FUNCTION: java
-      VALONIS_STORE_COUNT: 3
-      VALONIS_STORE_DOCKER_HOST_TEMPLATE: store-%d
-      VALONIS_STORE_DOCKER_PORT: 8080
+      KEYOSTAR_INSTANCE_MODE: GATEWAY
+      KEYOSTAR_GATEWAY_ADDRESSING: docker
+      KEYOSTAR_GATEWAY_HASH_FUNCTION: java
+      KEYOSTAR_GATEWAY_STORE_COUNT: 3
+
+      KEYOSTAR_DOCKER_STORE_HOST_TEMPLATE: store-%d
+      KEYOSTAR_DOCKER_STORE_PORT: 8080
+
       SERVER_PORT: 8080
+
     ports:
       - "8080:8080"
 
   store-0:
-    image: valonis:local
+    image: keyostar:local
     environment:
-      VALONIS_INSTANCE_MODE: STORE
+      KEYOSTAR_INSTANCE_MODE: STORE
       SERVER_PORT: 8080
     ports:
       - "9080:8080"
 
   store-1:
-    image: valonis:local
+    image: keyostar:local
     environment:
-      VALONIS_INSTANCE_MODE: STORE
+      KEYOSTAR_INSTANCE_MODE: STORE
       SERVER_PORT: 8080
     ports:
       - "9081:8080"
 
   store-2:
-    image: valonis:local
+    image: keyostar:local
     environment:
-      VALONIS_INSTANCE_MODE: STORE
+      KEYOSTAR_INSTANCE_MODE: STORE
       SERVER_PORT: 8080
     ports:
       - "9082:8080"
