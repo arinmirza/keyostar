@@ -67,6 +67,44 @@ The UI was prepared using the headless component library `zard-ui` which is a po
 
 ### API
 
+Keyostar exposes different API prefixes depending on the configured instance mode. Clients are expected to communicate with a gateway instance through `/gateway`. Store instances expose an analogous `/store` API, primarily for internal communication and direct testing.
+
+| Mode | Method | Endpoint | Request Body | Success Response | Other Responses |
+|---|---|---|---|---|---|
+| Gateway | `GET` | `/gateway/key/{key}` | — | `200 OK` with the stored value as plain text | `400 Bad Request` for invalid keys, `404 Not Found` if the key does not exist, `503 Service Unavailable` if the responsible store cannot be reached, `500 Internal Server Error` for unexpected errors |
+| Gateway | `PUT` | `/gateway/key/{key}` | Value as plain text | Forwards the store response; normally `204 No Content` | `400 Bad Request` for invalid key/value, `503 Service Unavailable` if the responsible store cannot be reached, `500 Internal Server Error` for unexpected errors |
+| Gateway | `DELETE` | `/gateway/key/{key}` | — | `204 No Content` if the key existed | `400 Bad Request` for invalid keys, `404 Not Found` if the key does not exist, `503 Service Unavailable` if the responsible store cannot be reached, `500 Internal Server Error` for unexpected errors |
+| Gateway | `GET` | `/gateway/stats` | — | `200 OK` with a JSON array containing the statistics reported by each configured store | Unreachable stores are represented by an empty object in the returned array |
+| Store | `GET` | `/store/key/{key}` | — | `200 OK` with the stored value as plain text | `400 Bad Request` for invalid keys, `404 Not Found` if the key does not exist |
+| Store | `PUT` | `/store/key/{key}` | Value as plain text | `204 No Content` | `400 Bad Request` for invalid key/value |
+| Store | `DELETE` | `/store/key/{key}` | — | `204 No Content` if the key existed | `400 Bad Request` for invalid keys, `404 Not Found` if the key does not exist |
+| Store | `GET` | `/store/stats` | — | `200 OK` with a JSON object of the form `{ "size": "<number>" }` | — |
+
+Keys must be non-blank and may contain at most `MAX_KEY_LENGTH` characters. Values must not be `null` and may contain at most `MAX_VALUE_LENGTH` characters. Validation failures return `400 Bad Request` together with a plain-text description of the first detected violation.
+
+Successful `GET` requests return values as plain text. `PUT` and `DELETE` requests do not return a response body. Statistics endpoints return JSON.
+
+### Environment Variables
+
+Keyostar uses Spring Boot configuration properties and can be configured through environment variables. The same application image is used for both gateway and store instances; `KEYOSTAR_INSTANCE_MODE` determines which role is activated.
+
+| Environment Variable | Description | Typical Value / Example | Used By |
+|---|---|---|---|
+| `KEYOSTAR_INSTANCE_MODE` | Determines the role of the running instance. | `GATEWAY`, `STORE` | All instances |
+| `SERVER_PORT` | HTTP port on which the Spring Boot instance listens. | `8080` | All instances |
+| `KEYOSTAR_GATEWAY_ADDRESSING` | Selects how gateway instances resolve store addresses. | `localhost`, `docker`, `kubernetes` | Gateway |
+| `KEYOSTAR_GATEWAY_HASH_FUNCTION` | Selects the hash function used for partitioning keys. | `java` | Gateway |
+| `KEYOSTAR_GATEWAY_STORE_COUNT` | Number of store instances across which the key space is partitioned. This value is fixed at startup. | `3` | Gateway |
+| `KEYOSTAR_LOCAL_STORE_BASE_PORT` | Base port used by the localhost address resolver. Store `i` is expected at `basePort + i`. | `9080` | Gateway in localhost mode |
+| `KEYOSTAR_DOCKER_STORE_HOST_TEMPLATE` | Docker Compose hostname template used to resolve stores. | `store-%d` | Gateway in Docker mode |
+| `KEYOSTAR_DOCKER_STORE_PORT` | Internal port used by store containers. | `8080` | Gateway in Docker mode |
+| `KEYOSTAR_KUBERNETES_STORE_STATEFUL_SET_NAME` | Name of the Kubernetes StatefulSet used to construct stable store DNS names. | `keyostar-store` | Gateway in Kubernetes mode |
+| `KEYOSTAR_KUBERNETES_STORE_SERVICE_NAME` | Name of the headless Kubernetes Service through which individual stores are resolved. | `keyostar-store` | Gateway in Kubernetes mode |
+| `KEYOSTAR_KUBERNETES_STORE_PORT` | Port exposed by store pods inside the Kubernetes cluster. | `8080` | Gateway in Kubernetes mode |
+| `KEYOSTAR_OBSERVABILITY_LOGGER` | Selects the configured logging implementation. | `console` | All instances |
+| `KEYOSTAR_OBSERVABILITY_LOG_LEVEL` | Configures the application log level. | `trace` | All instances |
+
+
 ### Design Document
 TBD 
 
@@ -75,3 +113,11 @@ No tests are implemented due to the scope of the task. This will be discussed co
 
 ## Benchmarks
 No benchmarks are implemented due to the scope of the task. This will be discussed conceptually during the interview.
+
+## AI Disclosure
+
+### Implementation
+The implementation was written entirely by me. During the development process, I used generative AI to learn more about the technology stack, discuss and evaluate design ideas, brainstorm possible approaches, and review my code.
+
+### README.md
+This `README.md` was written by me and refined using generative AI for grammar, clarity, and conciseness. The API endpoint and environment variable tables were generated entirely with the assistance of AI. All AI-generated content was reviewed and verified by me for correctness.was reviewed and verified by me for correctness. 
